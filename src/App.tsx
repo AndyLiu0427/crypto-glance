@@ -6,7 +6,6 @@ import NavBar from './components/NavBar'
 import { ThemeProvider } from '@emotion/react'
 import { createTheme } from '@mui/material'
 import { blue } from '@mui/material/colors'
-import { dark } from '@mui/material/styles/createPalette'
 
 const theme = createTheme({
   palette: {
@@ -18,7 +17,7 @@ const theme = createTheme({
       dark: 0.9,
     },
   },
-});
+})
 
 function App() {
   return (
