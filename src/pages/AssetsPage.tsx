@@ -1,16 +1,15 @@
 import WalletConnect from '../components/WalletConnect'
-import AssetChart from '../components/AssetChart'
+import AssetOverview from '../components/AssetOverview'
 import AssetList from '../components/AssetList'
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2';
-
 
 const AssetsPage = () => {
 
   return (
     <Box sx={{
       flexGrow: 1,
-      height: '100vh',
+      height: 'max-content',
     }}>
       <Grid
         container
@@ -20,13 +19,13 @@ const AssetsPage = () => {
           px: 4,
         }}
       >
-        <Grid xs={12} md={4}>
+        <Grid xs={12} md={6}>
           <WalletConnect />
         </Grid>
-        <Grid xs={12} md={4}>
-          <AssetChart />
+        <Grid xs={12} md={6}>
+          <AssetOverview />
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid xs={12} md={12}>
           <AssetList />
         </Grid>
       </Grid>
