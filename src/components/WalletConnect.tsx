@@ -1,48 +1,143 @@
-import { Box, Card, CardContent, Typography } from '@mui/material'
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { WagmiProvider } from 'wagmi'
-import { config } from '../config'
-import { Profile } from './profile'
-import { WalletOptions } from './WalletOptions'
-import { Account } from './Account'
+import React, { useEffect, useState } from 'react';
+import { init, useConnectWallet } from '@web3-onboard/react';
+import injectedModule from '@web3-onboard/injected-wallets';
+import { Button, Typography, Box, Card, CardContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { createPublicClient, http, formatEther } from 'viem';
+import { mainnet, sepolia } from 'viem/chains';
 
-const queryClient = new QueryClient()
+// 定義支持的鏈
+const SUPPORTED_CHAINS = [
+  {
+    id: '0x1',
+    name: 'Ethereum Mainnet',
+    chain: mainnet,
+    rpcUrl: 'https://eth.llamarpc.com'
+  },
+  {
+    id: '0xaa36a7',
+    name: 'Sepolia Testnet',
+    chain: sepolia,
+    rpcUrl: 'https://rpc.sepolia.org'
+  },
+];
 
-function ConnectWallet() {
-  const { isConnected } = useAccount()
-  if (isConnected) return <Account />
-  return <WalletOptions />
-}
+// 初始化 Web3-Onboard
+const injected = injectedModule();
+init({
+  wallets: [injected],
+  chains: SUPPORTED_CHAINS.map(chain => ({
+    id: chain.id,
+    token: 'ETH',
+    label: chain.name,
+    rpcUrl: chain.rpcUrl
+  }))
+});
 
-const WalletConnect = () => {
+const WalletConnect: React.FC = () => {
+  const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
+  console.log('wallet:', wallet);
+  console.log('connecting:', connecting);
+  const [ethBalance, setEthBalance] = useState<string | null>(null);
+  const [network, setNetwork] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (wallet) {
+      const updateBalance = async () => {
+        const chainId = await wallet.provider.request({ method: 'eth_chainId' });
+        const currentChain = SUPPORTED_CHAINS.find(chain => chain.id === chainId);
+        if (currentChain) {
+          const publicClient = createPublicClient({
+            chain: currentChain.chain,
+            transport: http()
+          });
+
+          const balance = await publicClient.getBalance({ address: wallet.accounts[0].address as `0x${string}` });
+          setEthBalance(formatEther(balance));
+          setNetwork(currentChain.name);
+        }
+      };
+
+      updateBalance();
+    } else {
+      setEthBalance(null);
+      setNetwork(null);
+    }
+  }, [wallet]);
+
+  const handleConnect = () => {
+    connect();
+  };
+
+  const handleDisconnect = () => {
+    disconnect(wallet);
+  };
+
+  const handleNetworkChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
+    const newChainId = event.target.value as string;
+    if (wallet) {
+      try {
+        await wallet.provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: newChainId }],
+        });
+      } catch (error) {
+        console.error('Failed to switch network:', error);
+      }
+    }
+  };
+
   return (
-    <>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <Box sx={{ minWidth: 275 }}>
-            <Card
-              variant="outlined"
-              sx={{ minHeight: { xs: 'auto', md: 600 } }}
-            >
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Connect Wallet
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Connect your cryptocurrency wallet to view your asset portfolio.
-                </Typography>
-                
-                <Profile />
+    <Box>
+      <Card
+        variant="outlined"
+        sx={{ minHeight: { xs: 'auto', md: 600 } }}
+      >
+        <CardContent>
+          <Typography variant="h5" component="div">
+            Connect Wallet
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            Connect your cryptocurrency wallet to view your assets.
+          </Typography>
+        </CardContent>
+        <CardContent>
+          {!wallet && (
+            <Button sx={{ width: '100%' }} variant="contained" onClick={handleConnect} disabled={connecting}>
+              {connecting ? 'Connecting...' : 'Connect Wallet'}
+            </Button>
+          )}
+          {wallet && (
+            <Box>
+              <Typography variant="body1">
+                Connected: {wallet.accounts[0].address.slice(0, 6)}...{wallet.accounts[0].address.slice(-4)}
+              </Typography>
+              <Typography variant="body1">Network: {network}</Typography>
+              <Typography variant="body1">ETH Balance: {ethBalance}</Typography>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="network-select-label">Network</InputLabel>
+                <Select
+                  labelId="network-select-label"
+                  id="network-select"
+                  value={SUPPORTED_CHAINS.find(chain => chain.name === network)?.id || ''}
+                  label="Network"
+                  onChange={handleNetworkChange}
+                >
+                  {SUPPORTED_CHAINS.map((chain) => (
+                    <MenuItem key={chain.id} value={chain.id}>
+                      {chain.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button variant="contained" onClick={handleDisconnect} sx={{ width: '100%', mt: 2 }}>
+                Disconnect
+              </Button>
+            </Box>
+          )}
+        </CardContent>
+      </Card>
+    </Box>
+  );
+};
 
-                <ConnectWallet />
-              </CardContent>
-            </Card>
-          </Box>
-        </QueryClientProvider>
-      </WagmiProvider>
-    </>
-  )
-}
-
-export default WalletConnect
+export default WalletConnect;

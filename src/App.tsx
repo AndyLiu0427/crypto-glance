@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AssetsPage from './pages/AssetsPage'
 import { Provider } from 'react-redux'
-import store from './redux/store'
+import { store } from './store';
 import NavBar from './components/NavBar'
 import { ThemeProvider } from '@emotion/react'
 import { createTheme } from '@mui/material'

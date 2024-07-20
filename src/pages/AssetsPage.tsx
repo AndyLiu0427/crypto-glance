@@ -1,9 +1,8 @@
 import WalletConnect from '../components/WalletConnect'
-import AssetChart from '../components/AssetChart'
+import AssetOverview from '../components/AssetOverview'
 import AssetList from '../components/AssetList'
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2';
-
 
 const AssetsPage = () => {
 
@@ -24,7 +23,7 @@ const AssetsPage = () => {
           <WalletConnect />
         </Grid>
         <Grid xs={12} md={4}>
-          <AssetChart />
+          <AssetOverview />
         </Grid>
         <Grid xs={12} md={4}>
           <AssetList />
