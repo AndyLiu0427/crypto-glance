@@ -4,7 +4,6 @@ import { createPublicClient, http, createWalletClient, custom } from 'viem';
 import { mainnet, sepolia } from 'viem/chains';
 
 const injected = injectedModule();
-
 init({
   wallets: [injected],
   chains: [
@@ -12,13 +11,13 @@ init({
       id: '0x1',
       token: 'ETH',
       label: 'Ethereum Mainnet',
-      rpcUrl: 'https://mainnet.infura.io/v3/YOUR_INFURA_ID'
+      rpcUrl: 'https://eth.llamarpc.com'
     },
     {
       id: '0xaa36a7',
       token: 'SEP',
       label: 'Sepolia',
-      rpcUrl: 'https://sepolia.infura.io/v3/YOUR_INFURA_ID'
+      rpcUrl: 'https://rpc.sepolia.org'
     }
   ],
   appMetadata: {
@@ -33,16 +32,18 @@ init({
 
 export function useWeb3() {
   const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
+  console.log('wallet:', wallet);
+  console.log('connecting:', connecting);
 
   const publicClient = createPublicClient({
-    chain: mainnet,
+    chain: sepolia,
     transport: http()
   });
 
   const getWalletClient = () => {
     if (wallet) {
       return createWalletClient({
-        chain: mainnet,
+        chain: sepolia,
         transport: custom(wallet.provider)
       });
     }

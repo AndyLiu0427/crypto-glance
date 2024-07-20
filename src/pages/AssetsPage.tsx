@@ -9,7 +9,7 @@ const AssetsPage = () => {
   return (
     <Box sx={{
       flexGrow: 1,
-      height: '100vh',
+      height: 'max-content',
     }}>
       <Grid
         container
@@ -19,13 +19,13 @@ const AssetsPage = () => {
           px: 4,
         }}
       >
-        <Grid xs={12} md={4}>
+        <Grid xs={12} md={6}>
           <WalletConnect />
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid xs={12} md={6}>
           <AssetOverview />
         </Grid>
-        <Grid xs={12} md={4}>
+        <Grid xs={12} md={12}>
           <AssetList />
         </Grid>
       </Grid>

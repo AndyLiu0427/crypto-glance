@@ -4,6 +4,7 @@ import injectedModule from '@web3-onboard/injected-wallets';
 import { Button, Typography, Box, Card, CardContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { createPublicClient, http, formatEther } from 'viem';
 import { mainnet, sepolia } from 'viem/chains';
+import { appIcon } from '../constants';
 
 // 定義支持的鏈
 const SUPPORTED_CHAINS = [
@@ -30,15 +31,24 @@ init({
     token: 'ETH',
     label: chain.name,
     rpcUrl: chain.rpcUrl
-  }))
+  })),
+  appMetadata: {
+    name: 'CryptoGlance',
+    icon: appIcon,
+    description: 'Web3 asset management tool'
+  },
+  connect: {
+    autoConnectLastWallet: true
+  }
 });
 
 const WalletConnect: React.FC = () => {
   const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
-  console.log('wallet:', wallet);
-  console.log('connecting:', connecting);
   const [ethBalance, setEthBalance] = useState<string | null>(null);
   const [network, setNetwork] = useState<string | null>(null);
+
+  console.log('wallet:', wallet);
+  console.log('connecting:', connecting);
 
   useEffect(() => {
     if (wallet) {
@@ -90,7 +100,7 @@ const WalletConnect: React.FC = () => {
     <Box>
       <Card
         variant="outlined"
-        sx={{ minHeight: { xs: 'auto', md: 600 } }}
+        sx={{ minHeight: { xs: 'auto', md: 300 }, maxHeight: 'max-content' }}
       >
         <CardContent>
           <Typography variant="h5" component="div">
