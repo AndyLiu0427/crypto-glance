@@ -9,6 +9,10 @@
   --green-rgb: 125 161 35;
 }
 
+:focus {
+  outline: none;
+}
+
 body {
   font-family: "Work Sans", sans-serif;
   margin: 0;

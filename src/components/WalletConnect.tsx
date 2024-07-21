@@ -102,7 +102,7 @@ const WalletConnect: React.FC = () => {
     <Box>
       <Card
         variant="outlined"
-        sx={{ minHeight: { xs: 'auto', md: 300 }, maxHeight: 'max-content' }}
+        sx={{ minHeight: { xs: 'auto', md: 450 }, maxHeight: 'max-content' }}
       >
         <CardContent>
           <Typography variant="h5" component="div">

@@ -1,56 +1,55 @@
 import React from 'react';
 import { useAssetBalances } from '../hooks/useAssetBalances';
 import { SUPPORTED_TOKENS } from '../constants/tokens';
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { Box, Card, CardContent, Grid, Paper, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { pieArcLabelClasses, PieChart } from '@mui/x-charts/PieChart';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+const COLORS = ['#77B1A9', '#F4C7AB', '#FF6B6B', '#FFA07A', '#9B7EDE', '#FDB45C', '#76D7C4', '#F7CAC9', '#FFCCBC', '#87CEEB'];
+
 
 const AssetOverview: React.FC = () => {
   const { balances, prices } = useAssetBalances();
 
-  const totalValue = SUPPORTED_TOKENS.reduce((sum, token) => {
-    const balance = parseFloat(balances[token.symbol] || '0');
-    const price = prices[token.symbol] || 0;
-    return sum + balance * price;
-  }, 0);
-
-  const pieData = SUPPORTED_TOKENS.map((token) => {
+  const pieData = SUPPORTED_TOKENS.map((token, index) => {
     const balance = parseFloat(balances[token.symbol] || '0');
     const price = prices[token.symbol] || 0;
     const value = balance * price;
     return {
-      name: token.symbol,
+      id: index,
+      label: token.symbol,
       value: value,
     };
-  });
+  }).filter(item => item.value > 0);
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>
-        Asset Overview
-      </Typography>
-      <Typography variant="h6" gutterBottom style={{ marginTop: '20px' }}>
-        Asset Distribution
-      </Typography>
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie
-            data={pieData}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {pieData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
+    <Box>
+      <Card
+        variant="outlined"
+        sx={{ minHeight: { xs: 'auto', md: 450 }, maxHeight: 'max-content' }}
+      >
+        <CardContent>
+          <Typography variant="h5" component="div">
+            Asset Overview
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            Asset Distribution
+          </Typography>
+        </CardContent>
+        <CardContent>
+          <PieChart
+            colors={COLORS}
+            series={[
+              {
+                data: pieData,
+                highlightScope: { faded: 'global', highlighted: 'item' },
+                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+              },
+            ]}
+            height={300}
+          />
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 
