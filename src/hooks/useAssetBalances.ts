@@ -85,8 +85,8 @@ export const useAssetBalances = () => {
     };
 
     fetchBalancesAndPrices();
-    // const intervalId = setInterval(fetchBalancesAndPrices, 60000);
-    // return () => clearInterval(intervalId);
+    const intervalId = setInterval(fetchBalancesAndPrices, 60000);
+    return () => clearInterval(intervalId);
   }, [wallet, clients]);
 
   return { balances, prices, usdValues };
