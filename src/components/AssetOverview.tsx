@@ -1,13 +1,19 @@
 import React from 'react';
 import { useAssetBalances } from '../hooks/useAssetBalances';
 import { SUPPORTED_TOKENS } from '../constants/tokens';
-import { Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
 const AssetOverview: React.FC = () => {
   const { balances, prices } = useAssetBalances();
+
+  const totalValue = SUPPORTED_TOKENS.reduce((sum, token) => {
+    const balance = parseFloat(balances[token.symbol] || '0');
+    const price = prices[token.symbol] || 0;
+    return sum + balance * price;
+  }, 0);
 
   const pieData = SUPPORTED_TOKENS.map((token) => {
     const balance = parseFloat(balances[token.symbol] || '0');

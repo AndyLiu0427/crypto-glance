@@ -23,14 +23,12 @@ function App() {
   return (
     <main className="bg-slate-100">
       <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Router>
-            <NavBar />
-            <Routes>
-              <Route path="/assets" element={<AssetsPage />} />
-            </Routes>
-          </Router>
-        </Provider>
+        <Router>
+          <NavBar />
+          <Routes>
+            <Route path="/assets" element={<AssetsPage />} />
+          </Routes>
+        </Router>
       </ThemeProvider>
     </main>
   )
