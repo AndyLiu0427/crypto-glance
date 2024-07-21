@@ -1,9 +1,12 @@
-import { Box, Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { Box, Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { useAssetBalances } from '../hooks/useAssetBalances';
 import { SUPPORTED_TOKENS } from "../constants/tokens";
 
 const AssetList: React.FC = () => {
   const { balances, prices, usdValues } = useAssetBalances();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   const totalValue = SUPPORTED_TOKENS.reduce((sum, token) => {
     const balance = parseFloat(balances[token.symbol] || '0');
     const price = prices[token.symbol] || 0;
@@ -17,12 +20,19 @@ const AssetList: React.FC = () => {
           sx={{ minHeight: { xs: 'auto', md: 600 } }}
         >
           <CardContent>
-            <Typography variant="h5" component="div">
-              Asset List
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              View your cryptocurrency assets and their current value.
-            </Typography>
+          <Typography variant="h5" component="div">
+            Asset List
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                      View your cryptocurrency assets and their current value.
+                    </Typography>
+          <Typography
+            variant="h4"
+            component="div"
+            sx={{ fontWeight: 'bold' }}
+          >
+            ${totalValue.toFixed(2)}
+          </Typography>
           </CardContent>
           <CardContent>
             <TableContainer component={Paper}>
@@ -31,7 +41,7 @@ const AssetList: React.FC = () => {
                   <TableRow>
                     <TableCell>Symbol</TableCell>
                     <TableCell>Icon</TableCell>
-                    <TableCell>Address</TableCell>
+                    {!isSmallScreen && <TableCell>Address</TableCell>}
                     <TableCell>USD Value</TableCell>
                     <TableCell>Balance</TableCell>
                     <TableCell>Percentage</TableCell>
@@ -49,7 +59,7 @@ const AssetList: React.FC = () => {
                         <TableCell>
                           <img src={token.icon} alt={token.name} width="24" height="24" />
                         </TableCell>
-                        <TableCell>{token.address}</TableCell>
+                        {!isSmallScreen && <TableCell>{token.address}</TableCell>}
                         <TableCell>${price % 1 === 0 ? price.toFixed(2) : price}</TableCell>
                         <TableCell>
                           <Typography variant="body2">
