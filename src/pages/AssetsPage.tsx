@@ -14,10 +14,7 @@ const AssetsPage = () => {
       <Grid
         container
         spacing={3}
-        sx={{
-          mt: 4,
-          px: 4,
-        }}
+        sx={{ mt: 4, px: 4, }}
       >
         <Grid xs={12} md={6}>
           <WalletConnect />

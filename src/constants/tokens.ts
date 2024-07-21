@@ -1,8 +1,8 @@
 export const SUPPORTED_TOKENS = [
   {
-    symbol: 'ETH',
+    symbol: 'ETH', // WETH
     name: 'Ethereum',
-    address: 'ETH',
+    address: '0xC558DBdd856501FCd9aaF1E62eae57A9F0629a3c',
     decimals: 18,
     icon: 'https://assets.coingecko.com/coins/images/279/thumb/ethereum.png'
   },

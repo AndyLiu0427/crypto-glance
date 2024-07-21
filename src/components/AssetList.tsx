@@ -3,7 +3,7 @@ import { useAssetBalances } from '../hooks/useAssetBalances';
 import { SUPPORTED_TOKENS } from "../constants/tokens";
 
 const AssetList: React.FC = () => {
-  const { balances, prices } = useAssetBalances();
+  const { balances, prices, usdValues } = useAssetBalances();
   const totalValue = SUPPORTED_TOKENS.reduce((sum, token) => {
     const balance = parseFloat(balances[token.symbol] || '0');
     const price = prices[token.symbol] || 0;
@@ -32,8 +32,8 @@ const AssetList: React.FC = () => {
                     <TableCell>Symbol</TableCell>
                     <TableCell>Icon</TableCell>
                     <TableCell>Address</TableCell>
-                    <TableCell>Balance</TableCell>
                     <TableCell>USD Value</TableCell>
+                    <TableCell>Balance</TableCell>
                     <TableCell>Percentage</TableCell>
                   </TableRow>
                 </TableHead>
@@ -50,8 +50,15 @@ const AssetList: React.FC = () => {
                           <img src={token.icon} alt={token.name} width="24" height="24" />
                         </TableCell>
                         <TableCell>{token.address}</TableCell>
-                        <TableCell>{balance.toFixed(4)}</TableCell>
-                        <TableCell>${value.toFixed(2)}</TableCell>
+                        <TableCell>${price % 1 === 0 ? price.toFixed(2) : price}</TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            ${usdValues[token.symbol]?.toFixed(2) || '0.00'}
+                          </Typography>
+                          <Typography variant="caption" color="textSecondary">
+                            {parseFloat(balances[token.symbol] || '0').toFixed(4)} {token.symbol}
+                          </Typography>
+                        </TableCell>
                         <TableCell>{percentage.toFixed(2)}%</TableCell>
                       </TableRow>
                     );

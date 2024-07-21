@@ -47,8 +47,8 @@ const WalletConnect: React.FC = () => {
   const [ethBalance, setEthBalance] = useState<string | null>(null);
   const [network, setNetwork] = useState<string | null>(null);
 
-  console.log('wallet:', wallet);
-  console.log('connecting:', connecting);
+  // console.log('wallet:', wallet);
+  // console.log('connecting:', connecting);
 
   useEffect(() => {
     if (wallet) {
@@ -79,7 +79,9 @@ const WalletConnect: React.FC = () => {
   };
 
   const handleDisconnect = () => {
-    disconnect(wallet);
+    if (wallet) {
+      disconnect(wallet);
+    }
   };
 
   const handleNetworkChange = async (event: React.ChangeEvent<{ value: unknown }>) => {
