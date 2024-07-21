@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { init, useConnectWallet } from '@web3-onboard/react';
 import injectedModule from '@web3-onboard/injected-wallets';
-import { Button, Typography, Box, Card, CardContent, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { createPublicClient, http, formatEther } from 'viem';
+import { Button, Typography, Box, Card, CardContent, FormControl, InputLabel, Select, MenuItem, Tooltip, IconButton } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { createPublicClient, http, formatEther, formatGwei } from 'viem';
 import { mainnet, sepolia } from 'viem/chains';
 import { appIcon } from '../constants';
 
@@ -45,6 +47,7 @@ init({
 const WalletConnect: React.FC = () => {
   const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
   const [ethBalance, setEthBalance] = useState<string | null>(null);
+  const [gasPrice, setGasPrice] = useState<string | null>(null);
   const [network, setNetwork] = useState<string | null>(null);
 
   // console.log('wallet:', wallet);
@@ -61,8 +64,15 @@ const WalletConnect: React.FC = () => {
             transport: http()
           });
 
+          // 取得 ETH 餘額
           const balance = await publicClient.getBalance({ address: wallet.accounts[0].address as `0x${string}` });
           setEthBalance(formatEther(balance));
+
+          // 取得 Gas Price
+          const gasPrice = await publicClient.getGasPrice();
+          console.log('Gas Price:', gasPrice);
+          setGasPrice(formatGwei(gasPrice));
+
           setNetwork(currentChain.name);
         }
       };
@@ -98,6 +108,13 @@ const WalletConnect: React.FC = () => {
     }
   };
 
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500); // 1.5 秒後重置 copy 狀態
+  };
+
   return (
     <Box>
       <Card
@@ -120,10 +137,20 @@ const WalletConnect: React.FC = () => {
           )}
           {wallet && (
             <Box>
-              <Typography variant="body1">
-                Connected: {wallet.accounts[0].address.slice(0, 6)}...{wallet.accounts[0].address.slice(-4)}
-              </Typography>
+              <Box display="flex" alignItems="center">
+                <Typography variant="body1">
+                  Connected: {wallet.accounts[0].address.slice(0, 6)}...{wallet.accounts[0].address.slice(-4)}
+                </Typography>
+                <CopyToClipboard text={wallet.accounts[0].address} onCopy={handleCopy}>
+                  <Tooltip title={copied ? "Copied!" : "Copy address"} placement="top">
+                    <IconButton size="small" sx={{ ml: 1 }}>
+                      <ContentCopyIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </CopyToClipboard>
+              </Box>
               <Typography variant="body1">Network: {network}</Typography>
+              <Typography variant="body1">Gas Price: {gasPrice} Gwei</Typography>
               <Typography variant="body1">ETH Balance: {ethBalance}</Typography>
               <FormControl fullWidth margin="normal">
                 <InputLabel id="network-select-label">Network</InputLabel>
