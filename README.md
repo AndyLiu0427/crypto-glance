@@ -1,30 +1,76 @@
-# React + TypeScript + Vite
+# Crypto Glance
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CryptoGlance is a sleek and efficient Web3 asset management tool for cryptocurrency users. This application provides users with an intuitive overview of their cryptocurrency assets.
 
-Currently, two official plugins are available:
+It demonstrates proficiency in interacting with smart contracts, implementing data visualization, and handling real-time data updates - all crucial skills for modern Web3 development.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## <a name="tech-stack">⚙️ Tech Stack</a>
 
-## Expanding the ESLint configuration
+- Vite
+- TypeScript
+- React
+- Redux Toolkit
+- Material-UI
+- Tailwind CSS
+- viem
+- wagmi
+- Web3-Onboard
+- ESLint
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## <a name="features">🔋 Features</a>
 
-- Configure the top-level `parserOptions` property like this:
+👉 **Wallet Connection**: Connections with MetaMask and network switching.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+👉 **Asset Overview**
+   - Display ERC20 token and ETH (gas) balances in the connected wallet.
+   - Show asset USD values distribution in a pie chart.
+
+👉 **Transaction**: 
+
+👉 **Transaction Monitoring**: 
+
+## <a name="quick-start">🤸 Quick Start</a>
+
+Follow these steps to set up the project locally on your machine.
+
+Make sure you have prepare this:
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/en)
+- [npm](https://www.npmjs.com/) (Node Package Manager)
+- [MetaMask Chrome extension](https://chromewebstore.google.com/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn)
+- MetaMask account
+- Get AAVE Sepolia Testnet assets by [faucet](https://staging.aave.com/faucet/) and add tokens to wallet
+- Create endpoint in [QuickNode](https://www.quicknode.com/) (need login)
+
+
+**Cloning the Repository**
+
+```bash
+git clone https://github.com/AndyLiu0427/crypto-glance.git
+cd crypto-glance
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+**Installation**
+
+Install the project dependencies using npm:
+
+```bash
+npm install
+```
+
+**Set Up Environment Variables**
+
+Create a new file named `.env` in the root of your project and add the following content:
+
+```env
+VITE_QUICKNODE_ENDPOINT = "YOUR_QUICKNODE_ENDPOINT_URL"
+VITE_PRIVATE_KEY = "YOUR_WALLET_PRIVATE_KEY"
+```
+
+**Running the Project**
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser to view the project.
