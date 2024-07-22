@@ -32,8 +32,6 @@ init({
 
 export function useWeb3() {
   const [{ wallet, connecting }, connect, disconnect] = useConnectWallet();
-  // console.log('wallet:', wallet);
-  // console.log('connecting:', connecting);
 
   const publicClient = createPublicClient({
     chain: sepolia,
