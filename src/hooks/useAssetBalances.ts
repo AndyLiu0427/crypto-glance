@@ -22,9 +22,6 @@ export const useAssetBalances = () => {
     return null;
   }, [wallet]);
 
-  console.log('clients', clients)
-  console.log('wallet', wallet)
-
   useEffect(() => {
     const fetchBalancesAndPrices = async () => {
       if (!wallet || !clients) {
@@ -58,7 +55,7 @@ export const useAssetBalances = () => {
           }
           const formattedBalance = formatUnits(balance as bigint, token.decimals);
           newBalances[token.symbol] = formattedBalance;
-          
+
           const priceAddress = token.address;
           const price = await priceOracle.read.getAssetPrice([priceAddress as `0x${string}`]);
           const formattedPrice = parseFloat(formatUnits(price as bigint, 8)); // Aave prices are in 8 decimals
@@ -85,8 +82,8 @@ export const useAssetBalances = () => {
     };
 
     fetchBalancesAndPrices();
-    const intervalId = setInterval(fetchBalancesAndPrices, 60000);
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(fetchBalancesAndPrices, 60000);
+    // return () => clearInterval(intervalId);
   }, [wallet, clients]);
 
   return { balances, prices, usdValues };

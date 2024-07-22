@@ -50,8 +50,6 @@ const WalletConnect: React.FC = () => {
   const [gasPrice, setGasPrice] = useState<string | null>(null);
   const [network, setNetwork] = useState<string | null>(null);
 
-  // console.log('wallet:', wallet);
-  // console.log('connecting:', connecting);
 
   useEffect(() => {
     if (wallet) {
@@ -70,7 +68,6 @@ const WalletConnect: React.FC = () => {
 
           // 取得 Gas Price
           const gasPrice = await publicClient.getGasPrice();
-          console.log('Gas Price:', gasPrice);
           setGasPrice(formatGwei(gasPrice));
 
           setNetwork(currentChain.name);

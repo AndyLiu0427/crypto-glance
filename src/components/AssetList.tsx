@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { useAssetBalances } from '../hooks/useAssetBalances';
 import { SUPPORTED_TOKENS } from "../constants/tokens";
+import { TransferAsset } from "./TransferAsset";
 
 const AssetList: React.FC = () => {
   const { balances, prices, usdValues } = useAssetBalances();
@@ -12,6 +13,11 @@ const AssetList: React.FC = () => {
     const price = prices[token.symbol] || 0;
     return sum + balance * price;
   }, 0);
+
+  const handleTransferComplete = () => {
+    // useAssetBalances();
+  };
+
   return (
     <>
       <Box sx={{ minWidth: 275 }}>
@@ -24,15 +30,18 @@ const AssetList: React.FC = () => {
             Asset List
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                      View your cryptocurrency assets and their current value.
-                    </Typography>
-          <Typography
-            variant="h4"
-            component="div"
-            sx={{ fontWeight: 'bold' }}
-          >
-            ${totalValue.toFixed(2)}
+            View your cryptocurrency assets and their current value.
           </Typography>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Typography
+              variant="h4"
+              component="div"
+              sx={{ fontWeight: 'bold' }}
+            >
+              ${totalValue.toFixed(2)}
+            </Typography>
+            <TransferAsset assets={SUPPORTED_TOKENS} onTransferComplete={handleTransferComplete} />
+          </Box>
           </CardContent>
           <CardContent>
             <TableContainer component={Paper}>
