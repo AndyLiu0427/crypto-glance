@@ -73,4 +73,4 @@ VITE_PRIVATE_KEY = "YOUR_WALLET_PRIVATE_KEY"
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser to view the project.
+Open [http://localhost:5173/assets](http://localhost:5173/assets) in your browser to view the project.
